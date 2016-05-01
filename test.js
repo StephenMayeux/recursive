@@ -9,18 +9,16 @@ var config = {
   "css": ["sass", "css-min"]
 };
 
-var tasks = [];
+var tasks = getTasks(config, input, []);
 
-getTasks(input);
-
-function getTasks(input) {
-  input.forEach(function(task) {
-    if (config[task]) {
-      getTasks(config[task]);
+function getTasks(config, input, initial) {
+  return input.reduce(function(prev, next) {
+    if (config[next]) {
+      return getTasks(config, config[next], prev);
     } else {
-      tasks.push(task);
+      return prev.concat(next);
     }
-  });
+  }, initial); // can send in empty array on first iteration
 }
 
 console.log(tasks);
